@@ -1,0 +1,9 @@
+
+{% extends 'layouts/base.html' %}
+{% block content %}
+<div class="text-center">
+<h3>Scan QR</h3>
+<img src="data:image/png;base64,{{qr}}">
+<a href="/login" class="btn btn-primary mt-3">Login</a>
+</div>
+{% endblock %}

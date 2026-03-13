@@ -1,0 +1,64 @@
+{% extends 'layouts/base.html' %}
+{% block content %}
+<h2 class="mb-3">Admin Panel</h2>
+<p class="text-muted">Only admin accounts can manage roles and account status. Admin automatically inherits developer and user access.</p>
+
+<div class="table-responsive">
+<table class="table table-dark table-striped align-middle">
+<tr>
+    <th>User</th>
+    <th>Roles</th>
+    <th>Status</th>
+    <th>Actions</th>
+</tr>
+{% for u in users %}
+<tr>
+    <td>{{ u.username }}</td>
+    <td>
+        {% for role in u.roles %}
+            <span class="badge bg-primary me-1">{{ role }}</span>
+        {% endfor %}
+    </td>
+    <td>
+        {% if u.status == 'active' %}
+            <span class="badge bg-success">Active</span>
+        {% else %}
+            <span class="badge bg-danger">Blocked</span>
+        {% endif %}
+    </td>
+    <td>
+        {% if u.username == session.get('user') %}
+            <span class="text-warning">Current admin account</span>
+        {% else %}
+            <form action="/admin/user/{{ u._id }}/update" method="post" class="row g-2">
+                <div class="col-12">
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" name="roles" value="user" checked disabled>
+                        <label class="form-check-label">User</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" name="roles" value="developer" {% if 'developer' in u.roles %}checked{% endif %}>
+                        <label class="form-check-label">Developer</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" name="roles" value="admin" {% if 'admin' in u.roles %}checked{% endif %}>
+                        <label class="form-check-label">Admin</label>
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <select class="form-select" name="status">
+                        <option value="active" {% if u.status == 'active' %}selected{% endif %}>Active</option>
+                        <option value="blocked" {% if u.status == 'blocked' %}selected{% endif %}>Blocked</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <button class="btn btn-warning w-100">Save</button>
+                </div>
+            </form>
+        {% endif %}
+    </td>
+</tr>
+{% endfor %}
+</table>
+</div>
+{% endblock %}

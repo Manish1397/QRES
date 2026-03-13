@@ -1,0 +1,8 @@
+
+flask
+pymongo
+cryptography
+pyotp
+qrcode
+pillow
+bson

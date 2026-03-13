@@ -1,0 +1,85 @@
+{% extends 'layouts/base.html' %}
+{% block content %}
+<h2 class="mb-4">Developer Analytics</h2>
+
+<div class="row g-3 mb-4">
+    <div class="col-md-3">
+        <div class="card bg-dark text-white h-100">
+            <div class="card-body">
+                <h5>Total Users</h5>
+                <h2>{{ users }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-dark text-white h-100">
+            <div class="card-body">
+                <h5>Total Files</h5>
+                <h2>{{ files }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-dark text-white h-100">
+            <div class="card-body">
+                <h5>Active Users</h5>
+                <h2>{{ active_users }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-dark text-white h-100">
+            <div class="card-body">
+                <h5>Blocked Users</h5>
+                <h2>{{ blocked_users }}</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-lg-6">
+        <div class="card bg-dark text-white h-100">
+            <div class="card-body">
+                <h4>Role Coverage</h4>
+                <p>User access: {{ role_counts.user }} accounts</p>
+                <div class="progress mb-3"><div class="progress-bar" role="progressbar" style="width: {{ (role_counts.user / users * 100) if users else 0 }}%"></div></div>
+                <p>Developer access: {{ role_counts.developer }} accounts</p>
+                <div class="progress mb-3"><div class="progress-bar bg-success" role="progressbar" style="width: {{ (role_counts.developer / users * 100) if users else 0 }}%"></div></div>
+                <p>Admin access: {{ role_counts.admin }} accounts</p>
+                <div class="progress"><div class="progress-bar bg-warning" role="progressbar" style="width: {{ (role_counts.admin / users * 100) if users else 0 }}%"></div></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="card bg-dark text-white h-100">
+            <div class="card-body">
+                <h4>Security Insights</h4>
+                <p>Activation rate: <strong>{{ active_ratio }}%</strong></p>
+                <p>Average encrypted files per user: <strong>{{ encryption_ratio }}</strong></p>
+                <p>Developer analytics access is restricted to developer and admin roles only.</p>
+                <p>Admin accounts inherit developer and user permissions automatically.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card bg-dark text-white mt-4">
+    <div class="card-body">
+        <h4>Top File Owners</h4>
+        {% if top_owners %}
+        <table class="table table-dark table-striped mb-0">
+            <tr><th>User</th><th>Encrypted Files</th></tr>
+            {% for owner, count in top_owners %}
+            <tr>
+                <td>{{ owner }}</td>
+                <td>{{ count }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        {% else %}
+        <p class="mb-0">No encrypted files available yet.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

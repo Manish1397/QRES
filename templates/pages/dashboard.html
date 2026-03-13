@@ -1,0 +1,38 @@
+
+{% extends 'layouts/base.html' %}
+{% block content %}
+
+<h2>Your Files</h2>
+
+<form action="/encrypt" method="post" enctype="multipart/form-data">
+<input type="file" name="file">
+<button class="btn btn-primary">Encrypt</button>
+</form>
+
+<table class="table table-dark mt-4">
+<tr>
+<th>File</th>
+<th>Preview</th>
+<th>Decrypt</th>
+<th>ReEncrypt</th>
+<th>Delete</th>
+</tr>
+
+{% for f in files %}
+<tr>
+<td>{{f.filename}}</td>
+<td><a href="/preview/{{f._id}}" class="btn btn-info btn-sm">Preview</a></td>
+<td>
+<form action="/decrypt/{{f._id}}" method="post">
+<input name="otp" placeholder="OTP">
+<button class="btn btn-warning btn-sm">Decrypt</button>
+</form>
+</td>
+<td><a href="/reencrypt/{{f._id}}" class="btn btn-secondary btn-sm">ReEncrypt</a></td>
+<td><a href="/delete/{{f._id}}" class="btn btn-danger btn-sm">Delete</a></td>
+</tr>
+{% endfor %}
+
+</table>
+
+{% endblock %}
